@@ -1,0 +1,10 @@
+.ignore
+.pyc
+.vscode
+.idea
+.log
+.ini
+.DS_Store
+.env
+*.sh
+__pycache__

@@ -1,0 +1,9 @@
+urllib3
+ujson
+uuid
+boto3
+pyopenssl
+asyncio
+aiosfstream
+kafka
+pika
