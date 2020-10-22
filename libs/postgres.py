@@ -20,6 +20,24 @@ if (DATABASE_URL != ''):
     session_postgres = dbSession_postgres()
     LOGGER.info("{} - Initialization done Postgresql ".format(datetime.now()))
 
+def __resultToDict(result):
+    arrayData =  []
+    column_names = [desc[0] for desc in result.cursor.description]
+
+    for entry in result:
+        resDic = {}
+        for column in column_names:
+            resDic[column] = entry[column]
+            
+        arrayData.append(resDic)
+    return {'data' : arrayData, 'columns': column_names}
+
+def execRequest(strReq, Attributes):
+    if (MANUAL_ENGINE_POSTGRES != None):
+        result = MANUAL_ENGINE_POSTGRES.execute(strReq, Attributes)
+        return __resultToDict(result)
+    return {'data' : [], "columns": []}
+
 def insertServiceDefinition(dictValue):
   serviceName=dictValue['ServiceName']
   serviceLabel=dictValue['ServiceLabel']

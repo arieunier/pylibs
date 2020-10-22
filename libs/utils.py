@@ -1,6 +1,33 @@
 from libs import queuer, logs, rediscache, sfapi, config, postgres, rabbitmq_utils
-import ujson
+import ujson, uuid
 LOGGER = logs.LOGGER
+
+
+def CSVWrite(headerDict, dataDict):
+    uniqueName = uuid.uuid4().__str__()
+    CSV_Structure=''
+    for entry in headerDict:
+        CSV_Structure += entry + ','
+    #removes last ,
+    CSV_Structure = CSV_Structure[:-1]
+
+    
+    fileName = '/tmp/' + uniqueName + '.csv'
+    f = open(fileName ,'w')
+    LOGGER.info(fileName)
+    LOGGER.info(CSV_Structure + '\n')
+    f.write(CSV_Structure + '\n')
+    for entry in dataDict:
+        line = ""
+        for key in headerDict:
+            line += entry[key].__str__() + ','
+        #removes last ,
+        line = line[:-1] + '\n'
+        f.write(line)
+    f.close()
+    return fileName, CSV_Structure 
+
+    
 
 def get_jwt_token():
     jwt_token = rediscache.__getCache(config.REDIS_JWTTOKEN)
