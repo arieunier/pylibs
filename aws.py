@@ -16,8 +16,6 @@ BUCKETEER_BUCKET_NAME= config.BUCKETEER_BUCKET_NAME
 import mimetypes 
 
 
-#boto3.set_stream_logger(name='botocore')
-
 s3 = boto3.client('s3',aws_access_key_id=BUCKETEER_AWS_ACCESS_KEY_ID,aws_secret_access_key=BUCKETEER_AWS_SECRET_ACCESS_KEY)
 
 def uploadData(localfilename, remotefilename):
