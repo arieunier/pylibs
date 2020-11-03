@@ -29,15 +29,23 @@ def CSVWrite(headerDict, dataDict):
 
     
 
-def get_jwt_token():
-    jwt_token = rediscache.__getCache(config.REDIS_JWTTOKEN)
+def get_jwt_token(overrideUser=None):
+    tokenKey = config.REDIS_JWTTOKEN
+
+    if (overrideUser != None):        
+        tokenKey = config.REDIS_JWTTOKEN + '.' +  overrideUser
+
+    jwt_token = rediscache.__getCache(tokenKey)
     LOGGER.info(jwt_token)
     if (jwt_token == None):
         # connects
-        jwt_token = sfapi.jwt_login(config.CONSUMER_KEY, config.USERNAME, config.JWTKEY, config.SANDBOX)
+        username = config.USERNAME
+        if (overrideUser != None):
+            username = overrideUser
+        jwt_token = sfapi.jwt_login(config.CONSUMER_KEY, username, config.JWTKEY, config.SANDBOX)
         LOGGER.info(jwt_token)
         # saves into cache
-        rediscache.__setCache(config.REDIS_JWTTOKEN, ujson.dumps(jwt_token),config.JWTTOKEN_TTL)
+        rediscache.__setCache(tokenKey, ujson.dumps(jwt_token),config.JWTTOKEN_TTL)
     else:
         jwt_token = ujson.loads(jwt_token)
     return jwt_token
