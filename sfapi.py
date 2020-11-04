@@ -53,6 +53,16 @@ def jwt_login(consumer_id, username, private_key, sandbox=False):
     #return sf
     return body
 
+
+def sf_executeQuery(instance_url, access_token, username, soql_request):
+    url = instance_url + '/services/data/v45.0/chatter/feed-elements'
+    headers = {'Authorization': "Bearer " + access_token, "X-Prettylogger.debug": "1", "Content-Type" : "application/json"}
+    attributes = {'q':soql_request}
+
+    result = requests.get(url, headers=headers, params=attributes)
+    LOGGER.info(result)
+    return result
+
 def sf_ChatterPost(instance_url, access_token, recordid, userid, text):
     url = instance_url + '/services/data/v45.0/chatter/feed-elements'
     

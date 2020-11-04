@@ -51,6 +51,7 @@ def get_jwt_token(overrideUser=None):
     return jwt_token
 
 
+
 # sends the notification
 def sendNotification(messageContent):
     #check if the jwt token is properly  
