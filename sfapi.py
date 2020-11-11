@@ -55,7 +55,7 @@ def jwt_login(consumer_id, username, private_key, sandbox=False):
 
 
 def sf_executeQuery(instance_url, access_token, username, soql_request):
-    url = instance_url + '/services/data/v45.0/chatter/feed-elements'
+    url = instance_url + '/services/data/v47.0/query'
     headers = {'Authorization': "Bearer " + access_token, "X-Prettylogger.debug": "1", "Content-Type" : "application/json"}
     attributes = {'q':soql_request}
 

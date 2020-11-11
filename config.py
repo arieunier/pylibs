@@ -1,8 +1,13 @@
 import os
 
 LOG_LEVEL = os.getenv('LOG_LEVEL','DEBUG')
+SANDBOX=False
+SANDBOX_str=os.getenv('SANDBOX','True')
+if (SANDBOX_str == 'True'):
+    SANDBOX=True
+else:
+    SANDBOX=False
 
-SANDBOX = bool(os.getenv('SANDBOX','True'))
 # CONNECTED APP AND JWT PART
 CONSUMER_KEY=os.environ.get('CONSUMER_KEY','')
 CONSUMER_SECRET=os.environ.get('CONSUMER_SECRET','')
