@@ -3,7 +3,7 @@ import requests
 import ujson 
 from simple_salesforce import Salesforce, SalesforceLogin
 import time
-from libs import logs, config, utils
+from dclibs import logs, config, utils
 LOGGER = logs.LOGGER
 
 session_id = ''

@@ -9,7 +9,7 @@ import sys
 
 import random
 import string
-from libs import logs, rabbitmq_utils, config
+from dclibs import logs, rabbitmq_utils, config
 import ujson
 
 

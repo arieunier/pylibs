@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker
 from datetime import datetime 
 import os , ujson, json
 import uuid
-from libs import logs, config
+from dclibs import logs, config
 
 MANUAL_ENGINE_POSTGRES = None
 DATABASE_URL = config.DATABASE_URL

@@ -9,3 +9,5 @@
 *.sh
 __pycache__
 requirements.txt
+dclibs.egg-info/
+dist

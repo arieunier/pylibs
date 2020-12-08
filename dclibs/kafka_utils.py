@@ -8,7 +8,7 @@ from kafka.errors import KafkaError
 #Consumer, KafkaError, Producer
 import ujson 
 import datetime
-from libs import logs, kafka_utils, config
+from dclibs import logs, kafka_utils, config
 
 LOGGER = logs.LOGGER
 

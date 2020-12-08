@@ -1,6 +1,6 @@
 import boto3
 import os 
-from libs import logs, config
+from dclibs import logs, config
 import requests
 import uuid 
 

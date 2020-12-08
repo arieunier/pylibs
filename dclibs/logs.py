@@ -1,5 +1,5 @@
 import os, logging
-from libs import config 
+from dclibs import config 
 
 LOG_LEVEL = config.LOG_LEVEL
 

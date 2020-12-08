@@ -3,7 +3,7 @@ import os
 import ujson
 import json
 from datetime import datetime 
-from libs import logs, config
+from dclibs import logs, config
 
 import traceback
 REDIS_URL = config.REDIS_URL

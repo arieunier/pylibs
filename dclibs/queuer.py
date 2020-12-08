@@ -1,4 +1,4 @@
-from libs import config, rabbitmq_utils, kafka_utils, logs
+from dclibs import config, rabbitmq_utils, kafka_utils, logs
 
 LOGGER=logs.LOGGER
 TOPICS=config.TOPICS

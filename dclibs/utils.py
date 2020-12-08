@@ -1,4 +1,4 @@
-from libs import queuer, logs, rediscache, sfapi, config, postgres, rabbitmq_utils
+from dclibs import queuer, logs, rediscache, sfapi, config, postgres, rabbitmq_utils
 import ujson, uuid
 LOGGER = logs.LOGGER
 
