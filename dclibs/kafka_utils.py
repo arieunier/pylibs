@@ -30,12 +30,13 @@ file = open('static/kafka_ca', "w")
 data = file.write(KAFKA_TRUSTED_CERT)
 file.close()
 
-KAFKA_PREFIX=  config.KAFKA_PREFIX
+KAFKA_PREFIX=config.KAFKA_PREFIX
 KAFKA_GROUP_ID=config.KAFKA_GROUP_ID
 
 LOGGER.debug("KAFKA_PREFIX="+KAFKA_PREFIX)
 LOGGER.debug("KAFKA_GROUP_ID="+KAFKA_GROUP_ID)
 
+KAFKA_TOPIC_WRITE = config.KAFKA_TOPIC_WRITE
 """
     All the variable names here match the heroku env variable names.
     Just pass the env values straight in and it will work.
@@ -75,7 +76,7 @@ def sendToKafka(data, topic=None):
     """
 
     if topic==None:
-        sndTopic=KAFKA_PREFIX +  KAFKA_TOPIC_WRITE
+        sndTopic=KAFKA_PREFIX  +  KAFKA_TOPIC_WRITE
     else:
         sndTopic=KAFKA_PREFIX +  topic
 
@@ -110,8 +111,26 @@ def receiveFromKafka(mode, topic_override, callback):
         
     )
     """
-    
-    consumer = HerokuKafkaConsumer(
+    if (config.KAFKA_USE_GROUP == 'True'):
+        consumer = HerokuKafkaConsumer(
+            #KAKFA_TOPIC, # Optional: You don't need to pass any topic at all
+            url= KAFKA_URL, # Url string provided by heroku
+            ssl_cert= KAFKA_CLIENT_CERT, # Client cert string
+            ssl_key= KAFKA_CLIENT_CERT_KEY, # Client cert key string
+            ssl_ca= KAFKA_TRUSTED_CERT, # Client trusted cert string
+            prefix= KAFKA_PREFIX, # Prefix provided by heroku,
+            auto_offset_reset="smallest",
+            max_poll_records=100,
+            enable_auto_commit=True,
+            auto_commit_interval_ms=100,
+            group_id=KAFKA_GROUP_ID,
+            api_version = (0,9),
+            session_timeout_ms=180000,
+            request_timeout_ms=185000,
+            heartbeat_interval_ms=3000
+        )
+    else:
+        consumer = HerokuKafkaConsumer(
         #KAKFA_TOPIC, # Optional: You don't need to pass any topic at all
         url= KAFKA_URL, # Url string provided by heroku
         ssl_cert= KAFKA_CLIENT_CERT, # Client cert string
@@ -122,12 +141,12 @@ def receiveFromKafka(mode, topic_override, callback):
         max_poll_records=100,
         enable_auto_commit=True,
         auto_commit_interval_ms=100,
-        group_id=KAFKA_GROUP_ID,
         api_version = (0,9),
         session_timeout_ms=180000,
         request_timeout_ms=185000,
         heartbeat_interval_ms=3000
     )
+
 
 
     """
@@ -138,7 +157,7 @@ def receiveFromKafka(mode, topic_override, callback):
     
     tp = TopicPartition(KAFKA_PREFIX + TOPIC, partition)
     if (mode == "subscribe"):
-        consumer.subscribe(topics=(TOPIC))
+        consumer.subscribe(topics=(TOPIC.split(',')))
     elif (mode == "assign"):
         consumer.assign([tp])
 
@@ -151,8 +170,7 @@ def receiveFromKafka(mode, topic_override, callback):
     if (partitions):
         for partition in partitions:
             LOGGER.info("Partition="+str(partition))
-    
-    
+
     topics=consumer.topics()
     if (topics):
         for topic in topics:
@@ -176,15 +194,17 @@ def receiveFromKafka(mode, topic_override, callback):
                                               message.value))
 
             dictValue = ujson.loads(message.value)
-            LOGGER.info(dictValue)
-
+            dictValue['context'] = { 'topic': message.topic, 'partition':message.partition }
             callback(dictValue)
             
-            consumer.commit()
+            if (consumer.config['group_id'] != None and consumer.config['group_id'] != ''):
+                consumer.commit()
+
         except Exception as e :
             import traceback
             traceback.print_exc()
-            consumer.commit()
+            if (consumer.config['group_id'] != None and consumer.config['group_id'] != ''):
+                consumer.commit()
 
         i += 1
 

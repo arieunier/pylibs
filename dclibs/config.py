@@ -29,8 +29,11 @@ KAFKA_CLIENT_CERT=  os.getenv('KAFKA_CLIENT_CERT','')
 KAFKA_CLIENT_CERT_KEY=  os.getenv('KAFKA_CLIENT_CERT_KEY','')
 KAFKA_TRUSTED_CERT=  os.getenv('KAFKA_TRUSTED_CERT','')
 KAFKA_PREFIX=os.getenv('KAFKA_PREFIX','')
-KAFKA_GROUP_ID=os.getenv('KAFKA_CONSUMERGRP', KAFKA_PREFIX + 'my-consumer-group')
-
+if (KAFKA_PREFIX != ''):
+    KAFKA_PREFIX = KAFKA_PREFIX + '.' 
+KAFKA_GROUP_ID=os.getenv('KAFKA_CONSUMERGRP', KAFKA_PREFIX  + 'my-consumer-group')
+KAFKA_USE_GROUP=os.getenv('KAFKA_USE_GROUP', 'True')
+KAFKA_TOPIC_WRITE=os.getenv('KAFKA_TOPIC_WRITE', 'mytopicwrite')
 # REDIS
 REDIS_URL = os.getenv('REDIS_URL','')
 REDIS_JWTTOKEN='jwt_token'

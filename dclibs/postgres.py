@@ -32,10 +32,13 @@ def __resultToDict(result):
         arrayData.append(resDic)
     return {'data' : arrayData, 'columns': column_names}
 
-def execRequest(strReq, Attributes):
+
+
+def execRequest(strReq, Attributes, isInsert=False):
     if (MANUAL_ENGINE_POSTGRES != None):
         result = MANUAL_ENGINE_POSTGRES.execute(strReq, Attributes)
-        return __resultToDict(result)
+        if (isInsert == False):
+          return __resultToDict(result)  
     return {'data' : [], "columns": []}
 
 def insertServiceDefinition(dictValue):
