@@ -3,10 +3,14 @@ import os
 import ujson
 import json
 from datetime import datetime 
+from urllib.parse import urlparse
+
 from dclibs import logs, config
 
 import traceback
 REDIS_URL = config.REDIS_URL
+REDIS_TLS_URL = config.REDIS_TLS_URL
+USE_TLS = config.USE_TLS
 REDIS_CONN = None 
 
 LOGGER = logs.LOGGER
@@ -16,7 +20,18 @@ def __connect():
     global REDIS_CONN
     global REDIS_URL
     if (REDIS_URL != ''):
-        REDIS_CONN = redis.from_url(REDIS_URL)
+        LOGGER.info("Redis Url->{}".format(REDIS_URL))
+        LOGGER.info("Redis TLS Url->{}".format(REDIS_TLS_URL))
+        LOGGER.info("Redis USE_TLS ->{}".format(USE_TLS))
+        if (USE_TLS == "TRUE"):
+            # TLS VERSION
+            url = urlparse(REDIS_URL)
+            REDIS_CONN = redis.Redis(host=url.hostname, port=url.port, username=url.username, password=url.password, ssl=True, ssl_cert_reqs=None)
+        else:
+            # NORMAL VERSION
+            url = urlparse(REDIS_URL)
+            REDIS_CONN = redis.from_url(REDIS_URL)
+
         REDIS_CONN.set('key','value')
         REDIS_CONN.expire('key', 300) # 5 minutes
         LOGGER.info("{}  - Initialization done Redis" .format(datetime.now()))

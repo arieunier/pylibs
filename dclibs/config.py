@@ -36,6 +36,8 @@ KAFKA_USE_GROUP=os.getenv('KAFKA_USE_GROUP', 'True')
 KAFKA_TOPIC_WRITE=os.getenv('KAFKA_TOPIC_WRITE', 'mytopicwrite')
 # REDIS
 REDIS_URL = os.getenv('REDIS_URL','')
+USE_TLS = os.getenv('USE_REDIS_TLS','FALSE')
+REDIS_TLS_URL = os.getenv('REDIS_TLS_URL','')
 REDIS_JWTTOKEN='jwt_token'
 
 #DEFAULT LISTENING TOPIC

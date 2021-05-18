@@ -9,6 +9,9 @@ from dclibs import logs, config
 
 MANUAL_ENGINE_POSTGRES = None
 DATABASE_URL = config.DATABASE_URL
+uri = DATABASE_URL
+if uri.startswith("postgres://"):
+    DATABASE_URL = uri.replace("postgres://", "postgresql://", 1)
 
 LOGGER = logs.LOGGER
 
