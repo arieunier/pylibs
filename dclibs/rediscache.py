@@ -25,7 +25,7 @@ def __connect():
         LOGGER.info("Redis USE_TLS ->{}".format(USE_TLS))
         if (USE_TLS == "TRUE"):
             # TLS VERSION
-            url = urlparse(REDIS_URL)
+            url = urlparse(REDIS_TLS_URL)
             REDIS_CONN = redis.Redis(host=url.hostname, port=url.port, username=url.username, password=url.password, ssl=True, ssl_cert_reqs=None)
         else:
             # NORMAL VERSION

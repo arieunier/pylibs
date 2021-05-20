@@ -3,7 +3,7 @@ import setuptools
 
 setuptools.setup(
     name="dclibs", # Replace with your own username
-    version="0.0.9",
+    version="0.0.10",
     author="Augustin Rieunier",
     author_email="arieunier@salesforce.com",
     description="Libraries used as part of the distributed compute framework",
