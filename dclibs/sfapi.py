@@ -49,10 +49,7 @@ def jwt_login(consumer_id, username, private_key, sandbox=False):
     instance = body['instance_url']
     sfurl = instance
     
-    #sf = Salesforce(instance_url=body['instance_url'], session_id=body['access_token'])
-    #return sf
     return body
-
 
 def sf_executeQuery(instance_url, access_token, username, soql_request):
     url = instance_url + '/services/data/v47.0/query'
@@ -93,6 +90,7 @@ def sf_ChatterPost(instance_url, access_token, recordid, userid, text):
     result = requests.post(url, data=data , headers=headers, params=attributes)
     LOGGER.info(result)
 
+# BULK INGEST
 def bulkv2Ingest_CreateJob(instance_url, access_token, sfobject):
 
     url = instance_url + "/services/data/v48.0/jobs/ingest/"
@@ -126,7 +124,6 @@ def Bulkv2_CheckJobCompletion(instance_url, access_token, jobId, jobType):
     if (jobType == 'query'):
         return result['numberRecordsProcessed']
     return ""
-
 
 def bulkv2Ingest_InsertData(instance_url, access_token, jobid, data):
     url = instance_url + "/services/data/v48.0/jobs/ingest/" + jobid + "/batches/"
@@ -169,7 +166,6 @@ def bulkv2Ingest_CheckJobCompletion(instance_url, access_token, jobid, jobtype):
     return result.json()
 
 def Bulkv2_INSERT(fileName, CSV_HEADER, SF_RECORD_NAME):
-    
     jwt_token=utils.get_jwt_token()
     instance_url = jwt_token['instance_url']
     access_token = jwt_token['access_token']
@@ -182,3 +178,21 @@ def Bulkv2_INSERT(fileName, CSV_HEADER, SF_RECORD_NAME):
     bulkv2Ingest_InsertData(instance_url, access_token, bulkid, data)
     bulkv2Ingest_CloseJob(instance_url, access_token, bulkid)
     Bulkv2_CheckJobCompletion(instance_url, access_token, bulkid, "ingest")    
+
+def sf_downloadDocument(downloadUrl, AccessToken, completeFilename):
+    import requests
+    url = downloadUrl 
+    body = {
+        }
+    data=ujson.dumps(body)
+    headers = {'Authorization': "Bearer " + AccessToken, "X-Prettylogger.debug": "1", "Content-Type" : "application/json", "Accept": "application/json"}            
+    LOGGER.info("##### GET QUERY RESULT  #####")
+    LOGGER.info(url)        
+    LOGGER.info(headers)
+    with open(completeFilename, "wb") as file:
+        # get request
+        response = requests.get(url, data=data , headers=headers)
+        # write to file
+        file.write(response.content)
+        file.close()
+    
