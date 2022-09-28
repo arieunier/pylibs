@@ -1,7 +1,9 @@
-from dclibs import config, rabbitmq_utils, kafka_utils, logs
+from dclibs import config, rabbitmq_utils, logs
 
 LOGGER=logs.LOGGER
 TOPICS=config.TOPICS
+if config.QUEUING_SYSTEM == config.QUEUING_KAFKA:
+    import kafka_utils
 
 def initQueuer():
     if (config.QUEUING_SYSTEM == config.QUEUING_CLOUDAMQP):

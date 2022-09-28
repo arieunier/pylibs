@@ -51,6 +51,19 @@ def jwt_login(consumer_id, username, private_key, sandbox=False):
     
     return body
 
+
+def sf_updateRecord(instance_url, access_token, sfobject, sfid, params):
+    url = instance_url + '/services/data/v47.0/sobjects/' + sfobject + '/' + sfid
+    headers = {'Authorization': "Bearer " + access_token, "X-Prettylogger.debug": "1", "Content-Type" : "application/json"}
+    LOGGER.info(url)
+    #LOGGER.info(headers)
+    #LOGGER.info(params)
+    result = requests.patch(url, headers=headers, data=params)
+    LOGGER.info(result.content)
+    
+    return result
+
+
 def sf_executeQuery(instance_url, access_token, username, soql_request):
     url = instance_url + '/services/data/v47.0/query'
     headers = {'Authorization': "Bearer " + access_token, "X-Prettylogger.debug": "1", "Content-Type" : "application/json"}

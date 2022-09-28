@@ -1,4 +1,4 @@
-from kafka import KafkaProducer,KafkaConsumer, KafkaClient
+
 from heroku_kafka import HerokuKafkaProducer, HerokuKafkaConsumer
 from kafka import  TopicPartition
 from kafka.structs import OffsetAndMetadata
@@ -46,7 +46,7 @@ producer = None
 def init():
     global producer
 
-    producer = KafkaProducer(
+    producer = HerokuKafkaProducer(
             bootstrap_servers =KAFKA_URL.replace('kafka+ssl://','').split(','),
             security_protocol ='SSL',
             ssl_check_hostname=False,

@@ -1,6 +1,10 @@
 import os
+from dotenv import load_dotenv, find_dotenv
 
-LOG_LEVEL = os.getenv('LOG_LEVEL','DEBUG')
+load_dotenv(find_dotenv('salesforce.env', raise_error_if_not_found=True))
+print(os.environ)
+
+LOG_LEVEL = os.getenv('LOG_LEVEL','ERROR')
 SANDBOX=False
 SANDBOX_str=os.getenv('SANDBOX','True')
 if (SANDBOX_str == 'True'):
@@ -11,8 +15,9 @@ else:
 # CONNECTED APP AND JWT PART
 CONSUMER_KEY=os.environ.get('CONSUMER_KEY','')
 CONSUMER_SECRET=os.environ.get('CONSUMER_SECRET','')
-USERNAME=os.environ.get('USERNAME','arieunier.cdo.admin@salesforce.com')
+USERNAME=os.environ.get('USERNAME','')
 PASSWORD=os.environ.get('PASSWORD','')
+SALESFORCEUSERID=os.environ.get('SALESFORCEUSERID','')
 JWTKEY=os.environ.get('JWTKEY','')
 JWTTOKEN_TTL=int(os.environ.get('JWTTOKEN_TTL','300')) #5min ttl
 
@@ -62,3 +67,6 @@ QUEUING_CLOUDAMQP='CLOUDAMQP'
 QUEUING_KAFKA='KAFKA'
 
 OPPYCOPY_DEFAULT_SEND_METHOD=os.environ.get('OPPYCOPY_DEFAULT_SEND_METHOD','BULK').upper()
+
+PREFIX_ACCOUNT='001'
+PREFIX_CONTACT='003'
